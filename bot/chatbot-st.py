@@ -6,19 +6,20 @@ import streamlit as st
 
 # Begrüßung
 st.title("DNB-ChatBot")
-# st.subheader("Hallo! Ich beantworte Fragen zur Nutzung der Deutschen Nationalbibliothek. Wie kann ich weiterhelfen?")
 
 # Laden des Perplexity API-Key (in der shell anlegen mit: export PERPLEXITY_API_KEY=...)
 pplx_api_key = os.environ["PERPLEXITY_API_KEY"]
 
 # Erstellen einer Instanz von Perplexity LLM
-llm = Perplexity(api_key=pplx_api_key, model="mistral-7b-instruct", temperature=0.5, system_prompt="Du bist ein Experte für die Deutsche Nationalbibliothek. Du hilfst Nutzerinnen und Nutzern dabei, die Bibliothek zu benutzen. Du beantwortest Fragen zum Ausleihbetrieb und den verfügbaren Services. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Bibliothek, die nicht auf Fakten basieren. Wenn Du eine Information über die Bibliothek nicht hast, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+llm = Perplexity(api_key=pplx_api_key, model="sonar-small-chat", temperature=0.5, system_prompt="Du bist ein Experte für die Deutsche Nationalbibliothek. Du hilfst Nutzerinnen und Nutzern dabei, die Bibliothek zu benutzen. Du beantwortest Fragen zum Ausleihbetrieb und den verfügbaren Services. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Bibliothek, die nicht auf Fakten basieren. Wenn Du eine Information über die Bibliothek nicht hast, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
 Settings.llm = llm
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-m3")
 
 # Pfad zu den lokalen Dokumenten
-docs_path = "./bot/data"
-persist_dir = "./bot/storage"
+# docs_path = "./bot/data"
+# persist_dir = "./bot/storage"
+docs_path = "./bot/data_bb"
+persist_dir = "./bot/storage_bb"
 
 @st.cache_resource(show_spinner=True)
 def load_data():
@@ -26,7 +27,7 @@ def load_data():
     if not os.path.exists(persist_dir):
         st.write('Indiziere die Dokumente. Das dauert ein paar Augenblicke...')
         documents = SimpleDirectoryReader(docs_path).load_data()
-        index = VectorStoreIndex.from_documents(documents)
+        index = VectorStoreIndex.from_documents(documents, show_progress=True)
         index.storage_context.persist(persist_dir=persist_dir)
     else:
         st.write('Lade die indizierten Dokumente...')
@@ -41,7 +42,7 @@ chat_engine = index.as_chat_engine(chat_mode="condense_question", llm=llm, verbo
 # Chat-Verlauf initialisieren
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "bot", "content": "Was möchten Sie über die Nutzung der DNB erfahren?"}
+        {"role": "bot", "content": "Was möchten Sie erfahren?"}
     ]
 
 # Interaktive Frage-Antwort-Schleife basierend auf den indexierten Dateien
