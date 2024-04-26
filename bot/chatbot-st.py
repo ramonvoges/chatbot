@@ -70,7 +70,8 @@ if st.session_state.messages[-1]["role"] != "bot":
             st.write(response.response)
 
             # Quellenangaben ausgeben
-            st.write(f"S. {response.source_nodes[0].metadata['page_label']}, Datei {response.source_nodes[0].metadata['file_path']}")
+            for node in response.source_nodes:
+                st.write(f"S. {node.metadata['page_label']}, Datei {node.metadata['file_path']}")
             
             # An Verlauf anhängen
             message = {"role": "bot", "content": response.response}
