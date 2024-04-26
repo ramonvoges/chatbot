@@ -11,15 +11,23 @@ st.title("DNB-ChatBot")
 pplx_api_key = os.environ["PERPLEXITY_API_KEY"]
 
 # Erstellen einer Instanz von Perplexity LLM
-llm = Perplexity(api_key=pplx_api_key, model="sonar-small-chat", temperature=0.5, system_prompt="Du bist ein Experte für die Deutsche Nationalbibliothek. Du hilfst Nutzerinnen und Nutzern dabei, die Bibliothek zu benutzen. Du beantwortest Fragen zum Ausleihbetrieb und den verfügbaren Services. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Bibliothek, die nicht auf Fakten basieren. Wenn Du eine Information über die Bibliothek nicht hast, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+# llm = Perplexity(api_key=pplx_api_key, model="sonar-small-chat", temperature=0.5, system_prompt="Du bist ein Experte für die Deutsche Nationalbibliothek. Du hilfst Nutzerinnen und Nutzern dabei, die Bibliothek zu benutzen. Du beantwortest Fragen zum Ausleihbetrieb und den verfügbaren Services. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Bibliothek, die nicht auf Fakten basieren. Wenn Du eine Information über die Bibliothek nicht hast, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+# llm = Perplexity(api_key=pplx_api_key, model="sonar-small-chat", temperature=0.5, system_prompt="Du bist ein Experte für die Briefe von Christian Felix Weiße, die von Mark Lehmstedt unter Mitarbeit von Katrin Löffler herausgegeben und ediert wurden. Du hilfst Nutzerinnen und Nutzern dabei, Informationen über diese Briefe zu erhalten. Du beantwortest Fragen zum Inhalt der Briefe. Jeder Brief ist nummeriert. Zu Beginn jedes Eintrags steht, an wen der Brief Adressiert ist, und, wenn möglich, wann und wo er von Weiße geschrieben wurde. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Briefe, die nicht auf Fakten basieren. Wenn Du eine Information in den Briefen nicht findest, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+llm = Perplexity(api_key=pplx_api_key, model="sonar-small-chat", temperature=0.5, system_prompt="Du bist ein Experte für die Erschließung von Schlagworten. Du hilfst den Erschließenden dabei, die richtigen Schlagworte zu finden. Du beantwortest dafür Fragen auf der Grundlage der Regeln für die Schlagwortkategorisierung. Deine Antworten sollen auf den Regeln basieren. Halluziniere keine Informationen über die Schlagwortkategorisierung, die nicht auf den Regeln basieren. Wenn Du eine Information über die Schlagwortkategorisierung nicht hast, sage den Erschließenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+
 Settings.llm = llm
 Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-m3")
 
 # Pfad zu den lokalen Dokumenten
 # docs_path = "./bot/data"
 # persist_dir = "./bot/storage"
-docs_path = "./bot/data_bb"
-persist_dir = "./bot/storage_bb"
+# docs_path = "./bot/data_bb"
+# persist_dir = "./bot/storage_bb"
+# docs_path = "./bot/data_lehmstedt"
+# persist_dir = "./bot/storage_lehmstedt"
+docs_path = "./bot/data_rswk"
+persist_dir = "./bot/storage_rswk"
+
 
 @st.cache_resource(show_spinner=True)
 def load_data():
@@ -60,6 +68,10 @@ if st.session_state.messages[-1]["role"] != "bot":
         with st.spinner("Ich denke nach..."):
             response = chat_engine.chat(prompt)
             st.write(response.response)
+
+            # Quellenangaben ausgeben
+            st.write(f"S. {response.source_nodes[0].metadata['page_label']}, Datei {response.source_nodes[0].metadata['file_path']}")
+            
             # An Verlauf anhängen
             message = {"role": "bot", "content": response.response}
             st.session_state.messages.append(message)
