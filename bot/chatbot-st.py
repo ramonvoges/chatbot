@@ -1,7 +1,8 @@
 import os
 from collections import namedtuple
 from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext, load_index_from_storage
-from llama_index.llms.ollama import Ollama
+from llama_index.llms.perplexity import Perplexity
+# from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 import streamlit as st
 
@@ -11,7 +12,9 @@ st.title("DNB-ChatBot")
 @st.cache_resource(show_spinner=True)
 def load_model(model, temperature, system_prompt):
     # Laden des Modells
-    llm = Ollama(model=model, request_timeout=120.0, system_prompt=system_prompt)
+    pplx_api_key = os.environ["PERPLEXITY_API_KEY"]
+    llm = Perplexity(api_key=pplx_api_key, model=model, temperature=temperature, system_prompt=system_prompt)
+    # llm = Ollama(model=model, request_timeout=120.0, system_prompt=system_prompt)
 
     Settings.llm = llm
     Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-m3")
@@ -43,6 +46,14 @@ model = "sonar-small-chat"
 # model = "mixtral-8x7b-instruct"
 # model = "phi3"
 temperature = 0.2
+
+# Einstellungen sichtbar machen
+with st.sidebar:
+    st.write(f"Modell: {model}")
+    st.write(f"Temperatur: {temperature}")
+    st.write(f"Corpus: {c.description}")
+    st.write(f"Charakterisierung: {c.system_prompt}")
+    st.write(f"Dateien: {os.listdir(c.docs_path)}")
 
 # Laden des Modells
 llm = load_model(model=model, temperature=temperature, system_prompt=c.system_prompt)
