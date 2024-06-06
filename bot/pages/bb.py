@@ -2,11 +2,8 @@ import os
 from collections import namedtuple
 import streamlit as st
 
-from bot.start import load_model
-from bot.start import load_data
-
-# Begrüßung
-st.title("DNB-ChatBot")
+from start import load_model
+from start import load_data
 
 # Test-Corpora
 Corpus = namedtuple('TestCorpus', ['description', 'docs_path', 'storage_path', 'system_prompt'])
