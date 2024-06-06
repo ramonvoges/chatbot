@@ -5,6 +5,10 @@ import streamlit as st
 from start import load_model
 from start import load_data
 
+
+# Begrüßung
+st.title("DNB-ChatBot")
+
 # Test-Corpora
 Corpus = namedtuple('TestCorpus', ['description', 'docs_path', 'storage_path', 'system_prompt'])
 c = Corpus("Briefedition Weiße", "./bot/data_lehmstedt", "./bot/storage_lehmstedt", "Du bist ein Experte für die Briefe von Christian Felix Weiße, die von Mark Lehmstedt unter Mitarbeit von Katrin Löffler herausgegeben und ediert wurden. Du hilfst Nutzerinnen und Nutzern dabei, Informationen über diese Briefe zu erhalten. Du beantwortest Fragen zum Inhalt der Briefe. Jeder Brief ist nummeriert. Zu Beginn jedes Eintrags steht, an wen der Brief Adressiert ist, und, wenn möglich, wann und wo er von Weiße geschrieben wurde. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Briefe, die nicht auf Fakten basieren. Wenn Du eine Information in den Briefen nicht findest, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")

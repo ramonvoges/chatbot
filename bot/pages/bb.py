@@ -5,6 +5,10 @@ import streamlit as st
 from start import load_model
 from start import load_data
 
+
+# Begrüßung
+st.title("DNB-ChatBot")
+
 # Test-Corpora
 Corpus = namedtuple('TestCorpus', ['description', 'docs_path', 'storage_path', 'system_prompt'])
 c = Corpus("Dokumente aus der Benutzung", "./bot/data_bb", "./bot/storage_bb", "Du bist ein Experte für die Deutsche Nationalbibliothek. Du hilfst Nutzerinnen und Nutzern dabei, die Bibliothek zu benutzen. Du beantwortest Fragen zum Ausleihbetrieb und den verfügbaren Services. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Bibliothek. Wenn Du eine Information über die Bibliothek nicht hast, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")

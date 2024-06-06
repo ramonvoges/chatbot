@@ -5,6 +5,10 @@ import streamlit as st
 from start import load_model
 from start import load_data
 
+
+# Begrüßung
+st.title("DNB-ChatBot")
+
 # Test-Corpora
 Corpus = namedtuple('TestCorpus', ['description', 'docs_path', 'storage_path', 'system_prompt'])
 c = Corpus("Regelwerk für Schlagwortkatalogisierung", "./bot/data_rswk", "./bot/storage_rswk", "Du bist ein Experte für die Erschließung von Schlagworten. Du hilfst den Erschließenden dabei, die richtigen Schlagworte zu finden. Du beantwortest dafür Fragen auf der Grundlage der Regeln für die Schlagwortkategorisierung. Deine Antworten sollen auf den Regeln basieren. Halluziniere keine Informationen über die Schlagwortkategorisierung, die nicht auf den Regeln basieren. Wenn Du eine Information über die Schlagwortkategorisierung nicht hast, sage den Erschließenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
