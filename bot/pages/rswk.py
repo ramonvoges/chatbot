@@ -12,7 +12,7 @@ c = Corpus("Regelwerk für Schlagwortkatalogisierung", "./bot/data_rswk", "./bot
 # Angaben zum Modell
 model_options = [
     "llama3",
-    "mixtral",
+    "mistral",
     "aya",      
     "phi3"
 ]

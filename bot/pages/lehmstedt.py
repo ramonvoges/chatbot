@@ -12,7 +12,7 @@ c = Corpus("Briefedition Weiße", "./bot/data_lehmstedt", "./bot/storage_lehmste
 # Angaben zum Modell
 model_options = [
     "llama3",
-    "mixtral",
+    "mistral",
     "aya",      
     "phi3"
 ]

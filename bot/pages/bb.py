@@ -13,7 +13,7 @@ c = Corpus("Dokumente aus der Benutzung", "./bot/data_bb", "./bot/storage_bb", "
 # model_options = ["sonar-small-chat", "mixtral-8x7b-instruct"]
 model_options = [
     "llama3",
-    "mixtral",
+    "mistral",
     "aya",      
     "phi3"
 ]
