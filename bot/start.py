@@ -13,7 +13,7 @@ st.title("DNB-ChatBot")
 def load_model(model, system_prompt):
     # Laden des Modells
     # pplx_api_key = os.environ["PERPLEXITY_API_KEY"]
-    # llm = Perplexity(api_key=pplx_api_key, model=model, temperature=temperature, system_prompt=system_prompt)
+    # llm = Perplexity(api_key=pplx_api_key, model=model, temperature=0.2, system_prompt=system_prompt)
     llm = Ollama(model=model, request_timeout=120.0, system_prompt=system_prompt)
 
     Settings.llm = llm
