@@ -67,11 +67,12 @@ with tab1:
                 for item in response.response_gen:
                     full_response += item
                     placeholder.write(full_response)
+                placeholder.write(full_response)
                 # st.write(response.response)
 
                 # Quellenangaben ausgeben
-                for node in response.source_nodes[:5]:
-                    st.write(f"S. {node.metadata['page_label']}, Datei {node.metadata['file_path']}")
+                # for node in response.source_nodes[:5]:
+                #     st.write(f"S. {node.metadata['page_label']}, Datei {node.metadata['file_path']}")
 
                 # An Verlauf anhängen
                 message = {"role": "bot", "content": response.response}
