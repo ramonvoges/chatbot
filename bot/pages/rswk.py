@@ -6,10 +6,6 @@ from start import load_model
 from start import load_data
 
 
-# Beginne eine neue Konversation
-for key in st.session_state.keys():
-    del st.session_state[key]
-
 # Begrüßung
 st.title("DNB-ChatBot")
 
@@ -61,8 +57,13 @@ for message in st.session_state.messages:
 if st.session_state.messages[-1]["role"] != "bot":
     with st.chat_message("bot"):
         with st.spinner("Ich denke nach..."):
-            response = chat_engine.chat(prompt)
-            st.write(response.response)
+            response = chat_engine.stream_chat(prompt)
+            placeholder = st.empty()
+            full_response = ""
+            for item in response.response_gen:
+                full_response += item
+                placeholder.write(full_response)
+            placeholder.write(full_response)
 
             # Quellenangaben ausgeben
             # for node in response.source_nodes[:5]:
