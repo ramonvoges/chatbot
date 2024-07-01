@@ -6,6 +6,10 @@ from start import load_model
 from start import load_data
 
 
+# Beginne eine neue Konversation
+for key in st.session_state.keys():
+    del st.session_state[key]
+
 # Begrüßung
 st.title("DNB-ChatBot")
 

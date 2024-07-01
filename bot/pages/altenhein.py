@@ -9,6 +9,9 @@ from start import load_data
 tab1, tab2 = st.tabs(["Chatbot", "Zusammenfassung"])
 
 with tab1: 
+    # Beginne eine neue Konversation
+    for key in st.session_state.keys():
+        del st.session_state[key]
     # Begrüßung
     st.title("DNB-ChatBot")
 
@@ -48,9 +51,6 @@ with tab1:
         ]
 
     # Interaktive Frage-Antwort-Schleife basierend auf den indexierten Dateien
-    # TODO: Session state ggf. löschen, wenn Seiten gewechselt werden.
-    if prompt := st.chat_input("Ihre Frage"):
-         st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Verlauf der Unterhaltung anzeigen
     for message in st.session_state.messages:
@@ -77,6 +77,10 @@ with tab1:
                 # An Verlauf anhängen
                 message = {"role": "bot", "content": response.response}
                 st.session_state.messages.append(message)
+
+    # TODO: Session state ggf. löschen, wenn Seiten gewechselt werden.
+    if prompt := st.chat_input("Ihre Frage"):
+         st.session_state.messages.append({"role": "user", "content": prompt})
 
 
 with tab2:
