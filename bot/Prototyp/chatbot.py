@@ -1,6 +1,12 @@
 import os
 from collections import namedtuple
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings, StorageContext, load_index_from_storage
+from llama_index.core import (
+    VectorStoreIndex,
+    SimpleDirectoryReader,
+    Settings,
+    StorageContext,
+    load_index_from_storage,
+)
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 import streamlit as st
@@ -8,6 +14,7 @@ import streamlit as st
 
 # Begrüßung
 st.title("DNB-ChatBot")
+
 
 def delete_chat():
     for key in st.session_state.keys():
@@ -23,11 +30,14 @@ def load_model(model, system_prompt):
     Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-m3")
     return llm
 
+
 @st.cache_resource(show_spinner=True)
 def load_data(docs_path, persist_dir):
     # Erstellen eines Indexes der lokalen Dateien
     if not os.path.exists(persist_dir):
-        st.write(f"Indiziere die Dokumente im Ordner {docs_path}. Das dauert ein paar Augenblicke...")
+        st.write(
+            f"Indiziere die Dokumente im Ordner {docs_path}. Das dauert ein paar Augenblicke..."
+        )
         documents = SimpleDirectoryReader(docs_path).load_data()
         index = VectorStoreIndex.from_documents(documents, show_progress=True)
         index.storage_context.persist(persist_dir=persist_dir)
@@ -39,16 +49,18 @@ def load_data(docs_path, persist_dir):
 
 
 # Test-Corpora
-Corpus = namedtuple('TestCorpus', ['description', 'docs_path', 'storage_path', 'system_prompt'])
-c = Corpus("Sci-Fi-Literatur", "./Prototyp/data", "./Prototyp/storage", "Du bist ein Experte für den Science Fiction- und Fantasy-Literatur. Du hilfst Nutzerinnen und Nutzern dabei, Informationen über die Dokumente zu erhalten. Du beantwortest Fragen zum Inhalt der Dokumente. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Dokumente. Wenn Du eine Information in den Dokumenten nicht findest, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.")
+Corpus = namedtuple(
+    "TestCorpus", ["description", "docs_path", "storage_path", "system_prompt"]
+)
+c = Corpus(
+    "Sci-Fi-Literatur",
+    "./Prototyp/data",
+    "./Prototyp/storage",
+    "Du bist ein Experte für den Science Fiction- und Fantasy-Literatur. Du hilfst Nutzerinnen und Nutzern dabei, Informationen über die Dokumente zu erhalten. Du beantwortest Fragen zum Inhalt der Dokumente. Deine Antworten sollen auf Fakten basieren. Halluziniere keine Informationen über die Dokumente. Wenn Du eine Information in den Dokumenten nicht findest, sage den Nutzenden, dass Du Ihnen nicht weiterhelfen kannst. Antworte auf Deutsch.",
+)
 
 # Angaben zum Modell
-model_options = [
-    "llama3",
-    "mistral",
-    "aya",      
-    "phi3"
-]
+model_options = ["llama3", "mistral", "aya", "phi3"]
 
 # Einstellungen sichtbar machen
 with st.sidebar:
@@ -69,12 +81,12 @@ chat_engine = index.as_chat_engine(chat_mode="condense_question", llm=llm, verbo
 # Chat-Verlauf initialisieren
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [
-        {"role": "bot", "content": "Was möchten Sie über den Vorlass erfahren?"}
+        {"role": "bot", "content": "Was möchten Sie über die Dokumente erfahren?"}
     ]
 
 # Interaktive Frage-Antwort-Schleife basierend auf den indexierten Dateien
 if prompt := st.chat_input("Ihre Frage"):
-     st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.messages.append({"role": "user", "content": prompt})
 
 # Verlauf der Unterhaltung anzeigen
 for message in st.session_state.messages:

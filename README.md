@@ -8,7 +8,7 @@ In einem Verzeichnis `data` liegen die Benutzungsordnung, Leitfäden und Hinweis
 
 ```shell
 poetry new bot
-poetry add llama-index llama-index-embeddings-huggingface llama-index-llms-perplexity llama-index-llms-ollama llama-index-embeddings-huggingface streamlit
+poetry add llama-index llama-index-embeddings-huggingface llama-index-llms-ollama streamlit
 ```
 
 ## Aufruf des ChatBots
